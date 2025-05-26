@@ -4,6 +4,15 @@
 <!-- Start Content -->
 <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class="fw-bold py-3 mb-4">Daftar Rute</h4>
+
+    {{-- Notifikasi sukses --}}
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bx bx-check-circle me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     
     <a href="{{ route('rute.create') }}" class="btn btn-primary mb-3">Tambah Rute</a>
     
@@ -33,7 +42,7 @@
                             <form action="{{ route('rute.destroy', $rute) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Hapus</button>
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus rute ini?')">Hapus</button>
                             </form>
                         </td>
                     </tr>
