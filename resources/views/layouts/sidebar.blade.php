@@ -38,6 +38,14 @@
      <a href="/transaksi" class="menu-link">
         <i class="menu-icon tf-icons bx bx-car"></i>
         <div>Data transaksi</div>
+
+        <li class="menu-item">
+    <a href="{{ route('feedback.index') }}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-message-dots"></i>
+        <div data-i18n="Feedback">Feedback</div>
+    </a>
+</li>
+
       </a>
     </li>
   </ul>
