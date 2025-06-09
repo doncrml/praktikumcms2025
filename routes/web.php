@@ -8,19 +8,41 @@ use App\Http\Controllers\RuteController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\FeedbackController;
 
-// Halaman Home
+
 Route::get('/', function () {
     return view('home');
 })->name('home');
 
-// Resource Routes (CRUD lengkap)
-Route::resource('/pengguna', PenggunaController::class);
-Route::resource('/pengemudi', PengemudiController::class);
-Route::resource('/kendaraan', KendaraanController::class);
-Route::resource('/rute', RuteController::class);
-Route::resource('/transaksi', TransaksiController::class);
 
-// Manual Routes (khusus Feedback, karena tidak pakai edit/update/show)
+Route::get('/login/admin', function () {
+    session(['role' => 'admin']);
+    return redirect()->route('admin.dashboard');
+})->name('login.admin');
+
+Route::get('/logout', function () {
+    session()->forget('role');
+    return redirect()->route('home');
+})->name('logout');
+
+
+
+
+Route::middleware(['checkadmin'])->group(function () {
+
+  
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
+ 
+    Route::resource('/pengguna', PenggunaController::class);
+    Route::resource('/pengemudi', PengemudiController::class);
+    Route::resource('/kendaraan', KendaraanController::class);
+    Route::resource('/rute', RuteController::class);
+    Route::resource('/transaksi', TransaksiController::class);
+});
+
+
 Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
 Route::get('/feedback/create', [FeedbackController::class, 'create'])->name('feedback.create');
 Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
