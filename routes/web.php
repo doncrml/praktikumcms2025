@@ -7,6 +7,7 @@ use App\Http\Controllers\KendaraanController;
 use App\Http\Controllers\RuteController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\ImageController;
 
 
 Route::get('/', function () {
@@ -47,3 +48,7 @@ Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.in
 Route::get('/feedback/create', [FeedbackController::class, 'create'])->name('feedback.create');
 Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
 Route::delete('/feedback/{id}', [FeedbackController::class, 'destroy'])->name('feedback.destroy');
+
+Route::get('/upload', [ImageController::class, 'create']);
+Route::post('/upload', [ImageController::class, 'store'])->name('image.upload');
+Route::delete('/upload/{id}', [ImageController::class, 'destroy'])->name('image.delete');

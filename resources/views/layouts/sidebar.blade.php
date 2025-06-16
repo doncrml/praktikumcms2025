@@ -14,6 +14,7 @@
         <div>Dashboard</div>
       </a>
     </li>
+
     <li class="menu-item {{ request()->is('pengguna') ? 'active' : '' }}">
       <a href="/pengguna" class="menu-link">
         <i class="menu-icon tf-icons bx bx-user"></i>
@@ -44,6 +45,14 @@
         <i class="menu-icon tf-icons bx bx-message-dots"></i>
         <div data-i18n="Feedback">Feedback</div>
     </a>
+
+<li class="menu-item {{ request()->is('upload') ? 'active' : '' }}">
+  <a href="{{ url('/upload') }}" class="menu-link">
+      <i class="menu-icon tf-icons bx bx-upload"></i>
+      <div>Upload Gambar</div>
+  </a>
+</li>
+
 </li>
 
       </a>
