@@ -89,4 +89,16 @@ class TransaksiController extends Controller
 
         return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dihapus.');
     }
+    public function cek($id)
+    {
+    try {
+        $transaksi = Transaksi::with(['pengguna', 'pengemudi', 'rute'])->findOrFail($id);
+        return view('transaksi.cek', compact('transaksi'));
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        return response()->view('errors.transaksi-not-found', [], 404);
+    }
+}
+
+
+    
 }

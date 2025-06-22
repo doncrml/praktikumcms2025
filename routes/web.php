@@ -52,3 +52,5 @@ Route::delete('/feedback/{id}', [FeedbackController::class, 'destroy'])->name('f
 Route::get('/upload', [ImageController::class, 'create']);
 Route::post('/upload', [ImageController::class, 'store'])->name('image.upload');
 Route::delete('/upload/{id}', [ImageController::class, 'destroy'])->name('image.delete');
+
+Route::get('/transaksi/cek/{id}', [TransaksiController::class, 'cek'])->name('transaksi.cek');
