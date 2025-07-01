@@ -4,70 +4,84 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pengemudi;
+use Illuminate\Support\Facades\Log;
 
 class PengemudiController extends Controller
 {
-    // Menampilkan daftar pengemudi
     public function index()
     {
-        $pengemudi = Pengemudi::all(); // Mengambil semua data pengemudi dari database
+        $pengemudi = Pengemudi::all();
         return view('pengemudi.index', compact('pengemudi'));
     }
 
-    // Menampilkan form untuk membuat pengemudi baru
     public function create()
     {
         return view('pengemudi.create');
     }
 
-    // Menyimpan pengemudi baru
     public function store(Request $request)
     {
-        $request->validate([
-            'nama' => 'required|string|max:100',
-            'no_sim' => 'required|string|max:20',
-        ]);
+        try {
+            $request->validate([
+                'nama' => 'required|string|max:100',
+                'no_sim' => 'required|string|max:20',
+            ]);
 
-        // Membuat pengemudi baru di database
-        Pengemudi::create($request->all());
+            Pengemudi::create($request->all());
 
-        return redirect()->route('pengemudi.index')->with('success', 'Data pengemudi berhasil ditambahkan.');
+            Log::info('Pengemudi berhasil ditambahkan', $request->all());
+
+            return redirect()->route('pengemudi.index')->with('success', 'Data pengemudi berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            Log::error('Gagal menambahkan pengemudi: ' . $e->getMessage(), ['data' => $request->all()]);
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data pengemudi.');
+        }
     }
 
-    // Menampilkan detail pengemudi
     public function show($id)
     {
-        $pengemudi = Pengemudi::findOrFail($id); // Mencari pengemudi berdasarkan ID
+        $pengemudi = Pengemudi::findOrFail($id);
         return view('pengemudi.show', compact('pengemudi'));
     }
 
-    // Menampilkan form untuk mengedit pengemudi
     public function edit($id)
     {
-        $pengemudi = Pengemudi::findOrFail($id); // Mencari pengemudi berdasarkan ID
+        $pengemudi = Pengemudi::findOrFail($id);
         return view('pengemudi.edit', compact('pengemudi'));
     }
 
-    // Mengupdate pengemudi
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'nama' => 'required|string|max:100',
-            'no_sim' => 'required|string|max:20',
-        ]);
+        try {
+            $request->validate([
+                'nama' => 'required|string|max:100',
+                'no_sim' => 'required|string|max:20',
+            ]);
 
-        $pengemudi = Pengemudi::findOrFail($id);
-        $pengemudi->update($request->all());
+            $pengemudi = Pengemudi::findOrFail($id);
+            $pengemudi->update($request->all());
 
-        return redirect()->route('pengemudi.index')->with('success', 'Data pengemudi berhasil diperbarui.');
+            Log::info('Pengemudi berhasil diperbarui', ['id' => $id]);
+
+            return redirect()->route('pengemudi.index')->with('success', 'Data pengemudi berhasil diperbarui.');
+        } catch (\Exception $e) {
+            Log::error('Gagal memperbarui pengemudi: ' . $e->getMessage(), ['id' => $id]);
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui data pengemudi.');
+        }
     }
 
-    // Menghapus pengemudi
     public function destroy($id)
     {
-        $pengemudi = Pengemudi::findOrFail($id);
-        $pengemudi->delete();
+        try {
+            $pengemudi = Pengemudi::findOrFail($id);
+            $pengemudi->delete();
 
-        return redirect()->route('pengemudi.index')->with('success', 'Data pengemudi berhasil dihapus.');
+            Log::info('Pengemudi berhasil dihapus', ['id' => $id]);
+
+            return redirect()->route('pengemudi.index')->with('success', 'Data pengemudi berhasil dihapus.');
+        } catch (\Exception $e) {
+            Log::error('Gagal menghapus pengemudi: ' . $e->getMessage(), ['id' => $id]);
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data pengemudi.');
+        }
     }
 }

@@ -4,15 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pengguna;
+use Illuminate\Support\Facades\Log;
 
 class PenggunaController extends Controller
 {
     public function index()
     {
-        // Ambil semua data pengguna
         $pengguna = Pengguna::all();
-
-        // Kirim ke view pengguna.index
         return view('pengguna.index', compact('pengguna'));
     }
 
@@ -23,16 +21,23 @@ class PenggunaController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'id_pengguna' => 'required|integer|unique:pengguna,id_pengguna',
-            'nama' => 'required|string|max:100',
-            'alamat' => 'nullable|string|max:255',
-            'no_telepon' => 'nullable|string|max:15',
-        ]);
+        try {
+            $request->validate([
+                'id_pengguna' => 'required|integer|unique:pengguna,id_pengguna',
+                'nama' => 'required|string|max:100',
+                'alamat' => 'nullable|string|max:255',
+                'no_telepon' => 'nullable|string|max:15',
+            ]);
 
-        Pengguna::create($request->all());
+            Pengguna::create($request->all());
 
-        return redirect()->route('pengguna.index')->with('success', 'Data pengguna berhasil ditambahkan.');
+            Log::info('Pengguna berhasil ditambahkan', $request->all());
+
+            return redirect()->route('pengguna.index')->with('success', 'Data pengguna berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            Log::error('Gagal menambahkan pengguna: ' . $e->getMessage(), ['data' => $request->all()]);
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data pengguna.');
+        }
     }
 
     public function show($id)
@@ -49,23 +54,37 @@ class PenggunaController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'nama' => 'required|string|max:100',
-            'alamat' => 'nullable|string|max:255',
-            'no_telepon' => 'nullable|string|max:15',
-        ]);
+        try {
+            $request->validate([
+                'nama' => 'required|string|max:100',
+                'alamat' => 'nullable|string|max:255',
+                'no_telepon' => 'nullable|string|max:15',
+            ]);
 
-        $pengguna = Pengguna::findOrFail($id);
-        $pengguna->update($request->all());
+            $pengguna = Pengguna::findOrFail($id);
+            $pengguna->update($request->all());
 
-        return redirect()->route('pengguna.index')->with('success', 'Data pengguna berhasil diperbarui.');
+            Log::info('Pengguna berhasil diperbarui', ['id' => $id]);
+
+            return redirect()->route('pengguna.index')->with('success', 'Data pengguna berhasil diperbarui.');
+        } catch (\Exception $e) {
+            Log::error('Gagal memperbarui pengguna: ' . $e->getMessage(), ['id' => $id]);
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui data pengguna.');
+        }
     }
 
     public function destroy($id)
     {
-        $pengguna = Pengguna::findOrFail($id);
-        $pengguna->delete();
+        try {
+            $pengguna = Pengguna::findOrFail($id);
+            $pengguna->delete();
 
-        return redirect()->route('pengguna.index')->with('success', 'Data pengguna berhasil dihapus.');
+            Log::info('Pengguna berhasil dihapus', ['id' => $id]);
+
+            return redirect()->route('pengguna.index')->with('success', 'Data pengguna berhasil dihapus.');
+        } catch (\Exception $e) {
+            Log::error('Gagal menghapus pengguna: ' . $e->getMessage(), ['id' => $id]);
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data pengguna.');
+        }
     }
 }

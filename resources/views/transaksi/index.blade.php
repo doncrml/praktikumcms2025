@@ -37,7 +37,7 @@
                                         <td>{{ $t->id_transaksi }}</td>
                                         <td>{{ $t->pengguna->nama ?? 'N/A' }}</td>
                                         <td>{{ $t->pengemudi->nama ?? 'N/A' }}</td>
-                                        <td>{{ $t->rute->nama ?? 'N/A' }}</td>
+                                        <td>{{ $t->rute ? ucwords($t->rute->rute_awal) . ' - ' . ucwords($t->rute->rute_tujuan) : 'N/A' }}</td>
                                         <td>Rp {{ number_format($t->biaya, 0, ',', '.') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($t->tanggal_waktu)->format('d-m-Y H:i') }}</td>
                                         <td>
