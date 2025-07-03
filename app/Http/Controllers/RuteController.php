@@ -88,4 +88,13 @@ class RuteController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus rute.');
         }
     }
+    public function cek($id)
+    {
+        try {
+            $rute = Rute::findOrFail($id);
+            return view('rute.cek', compact('rute'));
+        } catch (ModelNotFoundException $e) {
+            return response()->view('errors.rute-not-found', [], 404);
+        }
+    }
 }

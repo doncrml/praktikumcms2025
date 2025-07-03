@@ -54,3 +54,8 @@ Route::post('/upload', [ImageController::class, 'store'])->name('image.upload');
 Route::delete('/upload/{id}', [ImageController::class, 'destroy'])->name('image.delete');
 
 Route::get('/transaksi/cek/{id}', [TransaksiController::class, 'cek'])->name('transaksi.cek');
+Route::get('/pengguna/cek/{id}', [App\Http\Controllers\PenggunaController::class, 'cek'])->name('pengguna.cek');
+Route::get('/pengemudi/cek/{id}', [App\Http\Controllers\PengemudiController::class, 'cek'])->name('pengemudi.cek');
+Route::get('/rute/cek/{id}', [App\Http\Controllers\RuteController::class, 'cek'])->name('rute.cek');
+Route::get('/kendaraan/cek/{plat}', [App\Http\Controllers\KendaraanController::class, 'cek'])->name('kendaraan.cek');
+Route::get('/image/cek/{id}', [App\Http\Controllers\ImageController::class, 'cek'])->name('image.cek');

@@ -94,4 +94,13 @@ class KendaraanController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus kendaraan.');
         }
     }
+    public function cek($plat)
+    {
+        try {
+            $kendaraan = Kendaraan::with('pengemudi')->findOrFail($plat);
+            return view('kendaraan.cek', compact('kendaraan'));
+        } catch (ModelNotFoundException $e) {
+            return response()->view('errors.kendaraan-not-found', [], 404);
+        }
+    }
 }

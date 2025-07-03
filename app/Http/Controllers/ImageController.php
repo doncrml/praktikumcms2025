@@ -59,4 +59,13 @@ class ImageController extends Controller
             return redirect()->back()->with('error', 'Gagal menghapus gambar.');
         }
     }
+    public function cek($id)
+    {
+        try {
+            $image = Image::findOrFail($id);
+            return view('image.cek', compact('image'));
+        } catch (ModelNotFoundException $e) {
+            return response()->view('errors.image-not-found', [], 404);
+        }
+    }
 }

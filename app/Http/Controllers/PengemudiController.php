@@ -84,4 +84,13 @@ class PengemudiController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data pengemudi.');
         }
     }
+    public function cek($id)
+    {
+        try {
+            $pengemudi = Pengemudi::findOrFail($id);
+            return view('pengemudi.cek', compact('pengemudi'));
+        } catch (ModelNotFoundException $e) {
+            return response()->view('errors.pengemudi-not-found', [], 404);
+        }
+    }
 }

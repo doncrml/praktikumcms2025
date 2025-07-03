@@ -87,4 +87,15 @@ class PenggunaController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data pengguna.');
         }
     }
+    
+    public function cek($id)
+    {
+        try {
+            $pengguna = Pengguna::findOrFail($id);
+            return view('pengguna.cek', compact('pengguna'));
+        } catch (ModelNotFoundException $e) {
+            return response()->view('errors.pengguna-not-found', [], 404);
+        }
+    }
+
 }
